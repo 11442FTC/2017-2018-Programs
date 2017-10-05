@@ -21,12 +21,21 @@ public class demoBot extends OpMode {
 
     @Override
     public void init() {
-
+    robot.init(hardwareMap);
     }
 
     @Override
     public void loop() {
-        robot.Motor.setPower(0.5);
+
+        if(gamepad1.a) {
+            robot.Motor.setPower(-0.3);
+        }
+       if(gamepad1.b){
+           robot.Motor.setPower(0);
+       }
+       if(gamepad1.x){
+           robot.Motor.setPower(0.3);
+       }
 
         if (gamepad1.dpad_right) {
             rightServoPosition += RIGHT_SPEED;
