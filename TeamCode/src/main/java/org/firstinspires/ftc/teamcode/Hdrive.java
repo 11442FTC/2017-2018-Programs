@@ -11,8 +11,11 @@ public class Hdrive extends OpMode {
 
     HdriveHardware robot = new HdriveHardware();
 
+    double rightServoPosition = robot.RIGHT_HOME;
+    final double RIGHT_SPEED = 0.01;
 
-
+    double leftServoPosition = robot.LEFT_HOME;
+    final double LEFT_SPEED = 0.01;
 
     @Override
     public void init() {
@@ -39,16 +42,44 @@ public class Hdrive extends OpMode {
 
 
         if(gamepad1.left_bumper){
-            robot.center.setPower(0.75);
+            robot.center.setPower(-1);
         }
 
-        if(gamepad1.right_bumper){
-            robot.center.setPower(-0.75);
-        }
+        else if(gamepad1.right_bumper){
+            robot.center.setPower(1);
 
+        }
         else{
             robot.center.setPower(0);
+
         }
+
+        if (gamepad2.a) {
+            rightServoPosition += RIGHT_SPEED;
+            leftServoPosition -= LEFT_SPEED;
+        }
+        else if (gamepad2.x){
+            rightServoPosition -= RIGHT_SPEED;
+            leftServoPosition += LEFT_SPEED;
+        }
+
+        if (gamepad2.dpad_up){
+            robot.lift.setPower(0.5);
+        }
+        else if (gamepad2.dpad_down){
+            robot.lift.setPower(-0.5);
+        }
+        else {
+            robot.lift.setPower(0);
+        }
+
+
+
+        rightServoPosition = Range.clip(rightServoPosition, robot.RIGHT_MIN_RANGE, robot.RIGHT_MAX_RANGE);
+        robot.rightServo.setPosition(rightServoPosition);
+
+        leftServoPosition = Range.clip(leftServoPosition, robot.LEFT_MIN_RANGE, robot.LEFT_MAX_RANGE);
+        robot.leftServo.setPosition(leftServoPosition);
 
     }
 
