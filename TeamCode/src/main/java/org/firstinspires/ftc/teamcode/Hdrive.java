@@ -12,10 +12,10 @@ public class Hdrive extends OpMode {
     HdriveHardware robot = new HdriveHardware();
 
     double rightServoPosition = robot.RIGHT_HOME;
-    final double RIGHT_SPEED = 0.01;
+    final double RIGHT_SPEED = 0.2;
 
     double leftServoPosition = robot.LEFT_HOME;
-    final double LEFT_SPEED = 0.01;
+    final double LEFT_SPEED = 0.2;
 
     @Override
     public void init() {
@@ -41,6 +41,7 @@ public class Hdrive extends OpMode {
         robot.leftMotor.setPower(left);
 
 
+
         if(gamepad1.left_bumper){
             robot.center.setPower(-1);
         }
@@ -54,20 +55,20 @@ public class Hdrive extends OpMode {
 
         }
 
-        if (gamepad2.a) {
+        if (gamepad1.x) {
             rightServoPosition += RIGHT_SPEED;
             leftServoPosition -= LEFT_SPEED;
         }
-        else if (gamepad2.x){
+        else if (gamepad1.b){
             rightServoPosition -= RIGHT_SPEED;
             leftServoPosition += LEFT_SPEED;
         }
 
-        if (gamepad2.dpad_up){
-            robot.lift.setPower(0.5);
+        if (gamepad1.dpad_up){
+            robot.lift.setPower(0.6);
         }
-        else if (gamepad2.dpad_down){
-            robot.lift.setPower(-0.5);
+        else if (gamepad1.dpad_down){
+            robot.lift.setPower(-0.6);
         }
         else {
             robot.lift.setPower(0);
@@ -85,7 +86,7 @@ public class Hdrive extends OpMode {
 
     double scaleInput(double dVal) {
         double[] scaleArray = {0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.20, 0.20, 0.24,
-                0.30, 0.32, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00};
+                0.30, 0.32, 0.36, 0.43, 0.50, 0.55, 0.57, 0.60, 0.63,0.65, 0.67, 0.72, 0.77, 0.8, 0.85, 0.9,0.95, 1.00};
 
         int index = (int) (dVal * 16.0);
 

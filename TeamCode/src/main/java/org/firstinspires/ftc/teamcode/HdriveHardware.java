@@ -40,7 +40,7 @@ public class HdriveHardware{
 
         rightMotor   = hwMap.dcMotor.get("right");
         leftMotor    = hwMap.dcMotor.get("left");
-        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         center  = hwMap.dcMotor.get("center");
         lift = hwMap.dcMotor.get("lift");
 
