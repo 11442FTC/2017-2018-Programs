@@ -32,6 +32,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -66,7 +67,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 
 @Autonomous(name="Concept: VuMark Id", group ="Concept")
-@Disabled
+
 public class vuforiaTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
@@ -103,7 +104,7 @@ public class vuforiaTest extends LinearOpMode {
          * Once you've obtained a license key, copy the string from the Vuforia web site
          * and paste it in to your code onthe next line, between the double quotes.
          */
-        parameters.vuforiaLicenseKey = "ATsODcD/////AAAAAVw2lR...d45oGpdljdOh5LuFB9nDNfckoxb8COxKSFX";
+        parameters.vuforiaLicenseKey = "AbepaPD/////AAAAGZ2478zb409QoyBJhzwZ+P4LDXx7uwgQor0E3LG/UcGAavPaphWjlW1xyC2H8zENMZbYEKRRezCMJOjJ95atQSMvJ+Bbt+q9Yuq8Qm/5aYrQ/cswaguW7dGA3tG0NuAkbKTDL3WwEFlObBtRGNuMUA3yZdLlHGQ7hdEr/9Ov4ZRtSIk2qFQBaLPxwWOFY4g2hWIXrINDfYcJfbfQWqzc9uw5axuE5AIRXr+ju/l+gOui7+zHO84HrVCK9IOyYREhYoUYja5x9PRdOvMuwwEHmdHjaAnwFABh1SmEx7qn9zMI5RlbwOaTBaXbeRjEjlsqx1EYNLCIGCwVP/3QEWZik3kGl0GmGih+YZ82p/gG0vUY\n";
 
         /*
          * We also indicate which camera on the RC that we wish to use.
