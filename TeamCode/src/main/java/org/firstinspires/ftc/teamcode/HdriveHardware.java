@@ -13,10 +13,19 @@ public class HdriveHardware{
     public DcMotor  rightMotor;
     public DcMotor  leftMotor;
     public DcMotor  center;
+
     public DcMotor  lift;
+    public DcMotor  arm;
+    public DcMotor flap;
+    public DcMotor track;
 
     public Servo rightServo;
     public Servo leftServo;
+
+    public Servo extend;
+    public Servo claw;
+
+    public Servo CServo;
 
     final double RIGHT_HOME = 1.0;
     final double RIGHT_MIN_RANGE  = 0.0;
@@ -26,6 +35,13 @@ public class HdriveHardware{
     final double LEFT_MIN_RANGE  = 0.0;
     final double LEFT_MAX_RANGE  = 1.0;
 
+    final double EXTEND_HOME = 1.0;
+
+    final double clawHome = 1.0;
+
+
+
+
     HardwareMap hwMap  = null;
 
     private ElapsedTime period  = new ElapsedTime();
@@ -33,6 +49,7 @@ public class HdriveHardware{
     public HdriveHardware() {
 
     }
+
     public void init(HardwareMap ahwMap) {
 
 
@@ -42,17 +59,32 @@ public class HdriveHardware{
         leftMotor    = hwMap.dcMotor.get("left");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         center  = hwMap.dcMotor.get("center");
+
         lift = hwMap.dcMotor.get("lift");
+
+        arm = hwMap.dcMotor.get("arm");
+        extend = hwMap.servo.get("extend");
+        claw = hwMap.servo.get("claw");
+
+
+        flap = hwMap.dcMotor.get("flap");
+        track = hwMap.dcMotor.get("track");
 
 
         rightServo = hwMap.servo.get("rservo");
         leftServo  = hwMap.servo.get("lservo");
 
+        CServo = hwMap.servo.get("CServo");
+
 
         rightMotor.setPower(0);
         leftMotor.setPower(0);
         center.setPower(0);
+
         lift.setPower(0);
+        arm.setPower(0);
+        flap.setPower(0);
+        track.setPower(0);
 
 
 
@@ -60,7 +92,9 @@ public class HdriveHardware{
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         center.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        flap.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        track.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
     }
