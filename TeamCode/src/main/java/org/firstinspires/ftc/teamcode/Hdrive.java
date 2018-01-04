@@ -5,9 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-
-@TeleOp(name="Hdrive", group="Test")
-public class Hdrive extends OpMode {
+@TeleOp(name = "Hdrive", group = "Test")
+class Hdrive extends OpMode {
 
     HdriveHardware robot = new HdriveHardware();
 
@@ -65,22 +64,22 @@ public class Hdrive extends OpMode {
         }
 
         if (gamepad1.dpad_up){
-            robot.lift.setPower(0.6);
+            //robot.lift.setPower(0.6);
         }
         else if (gamepad1.dpad_down){
-            robot.lift.setPower(-0.6);
+            //robot.lift.setPower(-0.6);
         }
         else {
-            robot.lift.setPower(0);
+            //robot.lift.setPower(0);
         }
 
 
 
-        rightServoPosition = Range.clip(rightServoPosition, robot.RIGHT_MIN_RANGE, robot.RIGHT_MAX_RANGE);
-        robot.rightServo.setPosition(rightServoPosition);
+       // rightServoPosition = Range.clip(rightServoPosition, robot.RIGHT_MIN_RANGE, robot.RIGHT_MAX_RANGE);
+        //robot.rightServo.setPosition(rightServoPosition);
 
-        leftServoPosition = Range.clip(leftServoPosition, robot.LEFT_MIN_RANGE, robot.LEFT_MAX_RANGE);
-        robot.leftServo.setPosition(leftServoPosition);
+        //leftServoPosition = Range.clip(leftServoPosition, robot.LEFT_MIN_RANGE, robot.LEFT_MAX_RANGE);
+        //robot.leftServo.setPosition(leftServoPosition);
 
     }
 

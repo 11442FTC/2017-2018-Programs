@@ -9,6 +9,10 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Hdrive2", group="Test")
 public class Hdrive2 extends OpMode {
+    /* Dan's comments
+    final int LEFT = 1;
+    final int MAX_HEIGHT = 840;
+    */
 
     HdriveHardware robot = new HdriveHardware();
 
@@ -17,6 +21,8 @@ public class Hdrive2 extends OpMode {
 
     double clawPosition = robot.clawHome;
     final double clawSpeed = 0.2;
+
+
 
     @Override
     public void init() {
@@ -42,27 +48,37 @@ public class Hdrive2 extends OpMode {
         robot.leftMotor.setPower(left);
 
 
+        float up = gamepad2.left_stick_y;
+        up = (float) scaleInput(up);
+        up = Range.clip(up, -1, 1);
+        robot.flap.setPower(up);
+        //^^power the glyph lift flap on the left joystick
+
+        float armUp = gamepad2.left_stick_y;
+        armUp = (float) scaleInput(armUp);
+        armUp = Range.clip(armUp, -1, 1);
+        robot.flap.setPower(armUp);
+
+
         if (gamepad1.left_bumper) {
             robot.center.setPower(-1);
         } else if (gamepad1.right_bumper) {
             robot.center.setPower(1);
-
         } else {
             robot.center.setPower(0);
+        }
+        //^^center wheel on left/right
+
+
+        if(gamepad2.dpad_right){
+            extendPosition += EXTEND_SPEED;
 
         }
-
-        if (gamepad2.dpad_up) {
-            robot.arm.setTargetPosition(840);
+        if(gamepad2.dpad_left){
+            extendPosition -= EXTEND_SPEED;
         }
 
-        if (gamepad2.dpad_right){
-            robot.arm.setTargetPosition(-200);
-            while (gamepad2.dpad_right){
-                extendPosition += EXTEND_SPEED;
 
-            }
-        }
         if(gamepad2.x){
             clawPosition += clawSpeed;
 
@@ -70,29 +86,23 @@ public class Hdrive2 extends OpMode {
         if (gamepad2.y){
             clawPosition -= clawSpeed;
         }
+        //^^ claw on arm servo
 
-        if(gamepad2.dpad_left){
-            extendPosition -= EXTEND_SPEED;
-        }
-
-        if (gamepad2.dpad_down){
-            robot.arm.setTargetPosition(robot.arm.getCurrentPosition() - 840);
-        }
-
-        if(gamepad2.a){
-            robot.flap.setTargetPosition(840);
+        if(gamepad2.right_bumper) {
+            robot.track.setPower(-0.5);
 
         }
-        else if(gamepad2.b){
-            robot.flap.setTargetPosition(robot.flap.getCurrentPosition()- 840);
-        }
-
-        while (gamepad2.right_bumper) {
-            robot.track.setPower(1);
-
+        else {
+            robot.track.setPower(0);
         }
 
 
+
+        extendPosition = Range.clip(extendPosition, robot.EXTEND_MIN_RANGE, robot.EXTEND_MAX_RANGE);
+        robot.extend.setPosition(extendPosition);
+
+        clawPosition = Range.clip(clawPosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
+        robot.claw.setPosition(clawPosition);
 
     }
 

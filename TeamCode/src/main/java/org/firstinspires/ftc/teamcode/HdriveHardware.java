@@ -14,16 +14,17 @@ public class HdriveHardware{
     public DcMotor  leftMotor;
     public DcMotor  center;
 
-    public DcMotor  lift;
+   // public DcMotor  lift;
     public DcMotor  arm;
     public DcMotor flap;
     public DcMotor track;
 
-    public Servo rightServo;
-    public Servo leftServo;
+    //public Servo rightServo;
+    //public Servo leftServo;
 
     public Servo extend;
     public Servo claw;
+    public Servo ski;
 
     public Servo CServo;
 
@@ -36,8 +37,12 @@ public class HdriveHardware{
     final double LEFT_MAX_RANGE  = 1.0;
 
     final double EXTEND_HOME = 1.0;
+    final double EXTEND_MIN_RANGE  = 0.0;
+    final double EXTEND_MAX_RANGE  = 1.0;
 
     final double clawHome = 1.0;
+    final double CLAW_MIN_RANGE  = 0.0;
+    final double CLAW_MAX_RANGE  = 1.0;
 
 
 
@@ -60,7 +65,7 @@ public class HdriveHardware{
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         center  = hwMap.dcMotor.get("center");
 
-        lift = hwMap.dcMotor.get("lift");
+       // lift = hwMap.dcMotor.get("lift");
 
         arm = hwMap.dcMotor.get("arm");
         extend = hwMap.servo.get("extend");
@@ -71,27 +76,28 @@ public class HdriveHardware{
         track = hwMap.dcMotor.get("track");
 
 
-        rightServo = hwMap.servo.get("rservo");
-        leftServo  = hwMap.servo.get("lservo");
+       // rightServo = hwMap.servo.get("rservo");
+        //leftServo  = hwMap.servo.get("lservo");
 
         CServo = hwMap.servo.get("CServo");
+
 
 
         rightMotor.setPower(0);
         leftMotor.setPower(0);
         center.setPower(0);
 
-        lift.setPower(0);
+       // lift.setPower(0);
         arm.setPower(0);
         flap.setPower(0);
         track.setPower(0);
 
 
 
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        center.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        center.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         flap.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         track.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
