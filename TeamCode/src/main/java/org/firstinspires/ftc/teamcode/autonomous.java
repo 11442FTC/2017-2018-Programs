@@ -14,6 +14,8 @@ public class autonomous extends LinearOpMode {
     HdriveHardware robot = new HdriveHardware();
     colorSensorTest sense = new colorSensorTest();
 
+
+
     static final double     COUNTS_PER_MOTOR_REV    = 1680 ;
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;
@@ -26,6 +28,7 @@ public class autonomous extends LinearOpMode {
 
 
         waitForStart();
+        picture.init();
         robot.CServo.setPosition(0);
         sense.init();
         if (sense.equals("blue")) {
@@ -38,21 +41,23 @@ public class autonomous extends LinearOpMode {
             robot.CServo.setPosition(1);
             encoderDrive(-0.5, 5, 0);
         }
-        picture.init();
         encoderDrive(0.75, 20, 20);
         if (picture.equals("center")){
             centerDrive(0.5, 12);
             robot.flap.setTargetPosition(840);
+            telemetry.addData("VuMark", "%s visible", picture);
 
         }
         else if (picture.equals("left")){
             centerDrive(0.5, 6);
             robot.flap.setTargetPosition(840);
+            telemetry.addData("VuMark", "%s visible", picture);
 
         }
         else if(picture.equals("right")){
             centerDrive(0.5, 18);
             robot.flap.setTargetPosition(840);
+            telemetry.addData("VuMark", "%s visible", picture);
 
         }
 

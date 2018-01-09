@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -22,9 +23,9 @@ public class HdriveHardware{
     //public Servo rightServo;
     //public Servo leftServo;
 
-    public Servo extend;
+    public CRServo extend;
     public Servo claw;
-    public Servo ski;
+    public Servo extendServo;
 
     public Servo CServo;
 
@@ -36,9 +37,7 @@ public class HdriveHardware{
     final double LEFT_MIN_RANGE  = 0.0;
     final double LEFT_MAX_RANGE  = 1.0;
 
-    final double EXTEND_HOME = 1.0;
-    final double EXTEND_MIN_RANGE  = 0.0;
-    final double EXTEND_MAX_RANGE  = 1.0;
+
 
     final double clawHome = 1.0;
     final double CLAW_MIN_RANGE  = 0.0;
@@ -68,7 +67,9 @@ public class HdriveHardware{
        // lift = hwMap.dcMotor.get("lift");
 
         arm = hwMap.dcMotor.get("arm");
-        extend = hwMap.servo.get("extend");
+        extend = hwMap.crservo.get("extend");
+
+        extendServo = hwMap.servo.get("extendServo");
         claw = hwMap.servo.get("claw");
 
 
@@ -98,8 +99,8 @@ public class HdriveHardware{
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         center.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        flap.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flap.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         track.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
