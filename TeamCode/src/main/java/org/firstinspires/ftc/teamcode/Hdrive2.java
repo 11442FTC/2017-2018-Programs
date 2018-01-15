@@ -33,8 +33,8 @@ public class Hdrive2 extends OpMode {
     @Override
     public void loop() {
 
-        float left = -gamepad1.left_stick_y;
-        float right = -gamepad1.right_stick_y;
+        float left = gamepad1.right_stick_y;
+        float right = gamepad1.left_stick_y;
 
         right = Range.clip(right, -1, 1);
         left = Range.clip(left, -1, 1);
@@ -62,9 +62,9 @@ public class Hdrive2 extends OpMode {
 
 
         if (gamepad1.left_bumper) {
-            robot.center.setPower(-1);
-        } else if (gamepad1.right_bumper) {
             robot.center.setPower(1);
+        } else if (gamepad1.right_bumper) {
+            robot.center.setPower(-1);
         } else {
             robot.center.setPower(0);
         }
@@ -84,7 +84,7 @@ public class Hdrive2 extends OpMode {
 
         }
         else if(gamepad2.left_bumper){
-            robot.track.setPower(-1);
+            robot.track.setPower(1);
         }
         else {
             robot.track.setPower(0);
