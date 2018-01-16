@@ -68,15 +68,20 @@ public class autoLineSimple extends LinearOpMode {
 
     /* Declare OpMode members. */
     HdriveHardware robot = new HdriveHardware();   // Use a hardware
-    private ElapsedTime     runtime = new ElapsedTime();
+    private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1680 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double COUNTS_PER_MOTOR_REV = 1680;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.1;
-    static final double     TURN_SPEED              = 0.5;
+    static final double FLAP_GEAR_DIAMETER = 4;
+    static final double FLAP_GEAR_REDUCTION = 3;
+    static final double COUNTS_PER_INCH_FLAP = (COUNTS_PER_MOTOR_REV * FLAP_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double DRIVE_SPEED = 0.1;
+    static final double TURN_SPEED = 0.5;
+    static final double FLAP_SPEED = 0.05;
+    static final double CENTER_SPEED = 0.5;
 
     @Override
     public void runOpMode() {
@@ -93,12 +98,16 @@ public class autoLineSimple extends LinearOpMode {
 
         robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.flap.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.center.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.flap.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.track.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
+        telemetry.addData("Path0", "Starting at %7d :%7d",
                 robot.leftMotor.getCurrentPosition(),
                 robot.rightMotor.getCurrentPosition());
         telemetry.update();
@@ -108,13 +117,18 @@ public class autoLineSimple extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  30, 30, 10);
+        //centerDrive(CENTER_SPEED, -12, 5);
+        encoderDrive(DRIVE_SPEED, 25, 25, 10);
+        centerDrive(CENTER_SPEED, -6, 3);
+        robot.track.setPower(-0.5);
+        verticalDrive(FLAP_SPEED, 6, 2);
+        robot.track.setPower(0);
+
 
 
         // pause for servos to move
 
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
+
     }
 
     /*
@@ -127,7 +141,7 @@ public class autoLineSimple extends LinearOpMode {
      */
     public void encoderDrive(double speed,
                              double leftInches, double rightInches, double timeoutS
-                             ) {
+    ) {
         int newLeftTarget;
         int newRightTarget;
 
@@ -135,8 +149,8 @@ public class autoLineSimple extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newLeftTarget = robot.leftMotor.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+            newRightTarget = robot.rightMotor.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
             robot.leftMotor.setTargetPosition(newLeftTarget);
             robot.rightMotor.setTargetPosition(newRightTarget);
 
@@ -160,8 +174,8 @@ public class autoLineSimple extends LinearOpMode {
                     (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
+                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
+                telemetry.addData("Path2", "Running at %7d :%7d",
                         robot.leftMotor.getCurrentPosition(),
                         robot.rightMotor.getCurrentPosition());
                 telemetry.update();
@@ -176,6 +190,83 @@ public class autoLineSimple extends LinearOpMode {
             robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             //  sleep(250);   // optional pause after each move
+        }
+    }
+
+    public void verticalDrive(double speed,
+                              double inches, double timeoutS) {
+        int newTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newTarget = robot.flap.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH_FLAP);
+
+            robot.flap.setTargetPosition(newTarget);
+
+            // Turn On RUN_TO_POSITION
+            robot.flap.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            robot.flap.setPower(Math.abs(speed));
+
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (robot.flap.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1", "Running to %7d", newTarget);
+                telemetry.addData("Path2", "Running at %7d", robot.flap.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            robot.flap.setPower(0);
+
+
+            // Turn off RUN_TO_POSITION
+            robot.flap.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
+        }
+    }
+
+    public void centerDrive(double speed, double centerInches, double timeoutS) {
+        int newCenterTarget;
+
+        if (opModeIsActive()) {
+
+            newCenterTarget = robot.center.getCurrentPosition() + (int) (centerInches * COUNTS_PER_INCH);
+
+            robot.center.setTargetPosition(newCenterTarget);
+
+            robot.center.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            runtime.reset();
+            robot.center.setPower(Math.abs(speed));
+
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (robot.center.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1", "Running to %7d", newCenterTarget);
+                telemetry.addData("Path2", "Running at %7d", robot.center.getCurrentPosition());
+                telemetry.update();
+            }
+            robot.center.setPower(0);
+
+            robot.center.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 }
