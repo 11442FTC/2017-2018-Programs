@@ -92,15 +92,15 @@ public class Hdrive2 extends OpMode {
         //^^ control the glyph track with the right and left bumpers
 
         if (gamepad2.dpad_right){
-            robot.extend.setPower(1);
+            robot.extend.setPower(0.5);
         }
         else if (gamepad2.dpad_left){
-            robot.extend.setPower(-1);
+            robot.extend.setPower(-0.5);
         }
         else{
             robot.extend.setPower(0);
         }
-        //^^ extend the arm with the servo with the right and left dpads
+        //^^ extend the arm with the motor with the right and left dpads
 
 
 

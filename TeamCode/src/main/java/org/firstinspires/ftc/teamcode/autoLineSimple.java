@@ -95,16 +95,18 @@ public class autoLineSimple extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
+//
+//        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.flap.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.center.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.flap.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.track.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.flap.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.center.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.flap.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.track.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setMode(robot);
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -118,11 +120,13 @@ public class autoLineSimple extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         //centerDrive(CENTER_SPEED, -12, 5);
-        encoderDrive(DRIVE_SPEED, 25, 25, 10);
-        centerDrive(CENTER_SPEED, -6, 3);
+        encoderDrive(robot, DRIVE_SPEED, 22, 22, 8);
+        centerDrive(CENTER_SPEED, -16, 5);
         robot.track.setPower(-0.5);
         verticalDrive(FLAP_SPEED, 6, 2);
         robot.track.setPower(0);
+        encoderDrive(robot, DRIVE_SPEED, 8, 8, 4);
+        encoderDrive(robot, -0.2, 2, 2, 3);
 
 
 
@@ -131,15 +135,23 @@ public class autoLineSimple extends LinearOpMode {
 
     }
 
-    /*
-     *  Method to perfmorm a relative move, based on encoder counts.
-     *  Encoders are not reset as the move is based on the current position.
-     *  Move will stop if any of three conditions occur:
-     *  1) Move gets to the desired position
-     *  2) Move runs out of time
-     *  3) Driver stops the opmode running.
-     */
-    public void encoderDrive(double speed,
+    public void setMode (HdriveHardware robot){
+
+        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.flap.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.center.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.flap.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.track.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
+
+
+    public void encoderDrive(HdriveHardware robot, double speed,
                              double leftInches, double rightInches, double timeoutS
     ) {
         int newLeftTarget;

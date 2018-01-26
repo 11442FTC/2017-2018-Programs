@@ -25,11 +25,12 @@ public class HdriveHardware{
     //public Servo rightServo;
     //public Servo leftServo;
 
-    public CRServo extend;
+    public DcMotor extend;
     public Servo claw;
     public Servo extendServo;
 
     public Servo CServo;
+    public Servo C2Servo;
 
     final double RIGHT_HOME = 1.0;
     final double RIGHT_MIN_RANGE  = 0.0;
@@ -69,10 +70,8 @@ public class HdriveHardware{
        // lift = hwMap.dcMotor.get("lift");
 
         arm = hwMap.dcMotor.get("arm");
-        extend = hwMap.crservo.get("extend");
-
-        extendServo = hwMap.servo.get("extendServo");
         claw = hwMap.servo.get("claw");
+        extend = hwMap.dcMotor.get("extend");
 
 
         flap = hwMap.dcMotor.get("flap");
@@ -83,6 +82,7 @@ public class HdriveHardware{
         //leftServo  = hwMap.servo.get("lservo");
 
         CServo = hwMap.servo.get("CServo");
+        C2Servo = hwMap.servo.get("C2Servo");
 
 
 
@@ -94,6 +94,7 @@ public class HdriveHardware{
         arm.setPower(0);
         flap.setPower(0);
         track.setPower(0);
+        extend.setPower(0);
 
 
 
@@ -104,6 +105,7 @@ public class HdriveHardware{
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         flap.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         track.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
     }

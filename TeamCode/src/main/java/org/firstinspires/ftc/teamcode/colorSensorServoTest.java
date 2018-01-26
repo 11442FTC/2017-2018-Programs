@@ -52,9 +52,9 @@ import java.util.Locale;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
  */
-@Autonomous(name = "Sensor: REVColorDistance", group = "Sensor")
-                          // Comment this out to add to the opmode list
-public class colorSensorTest extends LinearOpMode {
+@Autonomous(name = "ServoColorSensorRed")
+// Comment this out to add to the opmode list
+public class colorSensorServoTest extends LinearOpMode {
 
     /**
      * Note that the REV Robotics Color-Distance incorporates two sensors into one device.
@@ -76,15 +76,19 @@ public class colorSensorTest extends LinearOpMode {
     ColorSensor sensorColor;
     DistanceSensor sensorDistance;
 
+    HdriveHardware robot = new HdriveHardware();
+
     @Override
-    public void runOpMode() {
+    public void runOpMode()  {
 
         // get a reference to the color sensor.
         sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
-
+        autoLineSimple simple = new autoLineSimple();
+        simple.init();
+        robot.init(hardwareMap);
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
 
@@ -105,7 +109,7 @@ public class colorSensorTest extends LinearOpMode {
 
         // loop and read the RGB and distance data.
         // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
-        while (opModeIsActive()) {
+       // while (opModeIsActive() && !robot.C2Servo.equals(0.3)) {
             // convert the RGB values to HSV values.
             // multiply by the SCALE_FACTOR.
             // then cast it back to int (SCALE_FACTOR is a double)
@@ -123,6 +127,39 @@ public class colorSensorTest extends LinearOpMode {
             telemetry.addData("Blue ", sensorColor.blue());
             telemetry.addData("Hue", hsvValues[0]);
 
+
+            robot.C2Servo.setPosition(0.5);
+            robot.CServo.setPosition(0.5);
+            sleep(200);
+
+            // knocks blue off
+            // hue value is small = red
+            // move 0.1 left toward phone because that's where blue is
+            if (hsvValues[0] < 50) {
+                robot.C2Servo.setPosition(0.1);
+                sleep(500);
+            }
+            else if (hsvValues[0] > 50) {
+                robot.C2Servo.setPosition(0.9);
+                sleep(500);
+            }
+            robot.CServo.setPosition(0);
+            sleep(500);
+
+            // put glyph in tower
+
+            simple.setMode(robot);
+            simple.encoderDrive(robot, 0.2, 22, 22, 8);
+            simple.centerDrive(0.75, -8, 3.5);
+            robot.track.setPower(-0.5);
+            simple.verticalDrive(0.05, -8, 2);
+            robot.track.setPower(0);
+            simple.encoderDrive(robot, 0.2, 6, 6, 3);
+            simple.encoderDrive(robot, -0.2, 6, 6, 2);
+
+
+        //robot.C2Servo.setPosition(0.5);
+
             // change the background color to match the color detected by the RGB sensor.
             // pass a reference to the hue, saturation, and value array as an argument
             // to the HSVToColor method.
@@ -133,7 +170,7 @@ public class colorSensorTest extends LinearOpMode {
             });
 
             telemetry.update();
-        }
+      // }
 
         // Set the panel back to the default color
         relativeLayout.post(new Runnable() {
