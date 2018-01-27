@@ -56,23 +56,7 @@ import java.util.Locale;
 // Comment this out to add to the opmode list
 public class colorSensorServoTest extends LinearOpMode {
 
-    /**
-     * Note that the REV Robotics Color-Distance incorporates two sensors into one device.
-     * It has a light/distance (range) sensor.  It also has an RGB color sensor.
-     * The light/distance sensor saturates at around 2" (5cm).  This means that targets that are 2"
-     * or closer will display the same value for distance/light detected.
-     *
-     * Although you configure a single REV Robotics Color-Distance sensor in your configuration file,
-     * you can treat the sensor as two separate sensors that share the same name in your op mode.
-     *
-     * In this example, we represent the detected color by a hue, saturation, and value color
-     * model (see https://en.wikipedia.org/wiki/HSL_and_HSV).  We change the background
-     * color of the screen to match the detected color.
-     *
-     * In this example, we  also use the distance sensor to display the distance
-     * to the target object.  Note that the distance sensor saturates at around 2" (5 cm).
-     *
-     */
+
     ColorSensor sensorColor;
     DistanceSensor sensorDistance;
 
@@ -86,6 +70,7 @@ public class colorSensorServoTest extends LinearOpMode {
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
+
         autoLineSimple simple = new autoLineSimple();
         simple.init();
         robot.init(hardwareMap);
@@ -106,77 +91,45 @@ public class colorSensorServoTest extends LinearOpMode {
 
         // wait for the start button to be pressed.
         waitForStart();
+        Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                (int) (sensorColor.green() * SCALE_FACTOR),
+                (int) (sensorColor.blue() * SCALE_FACTOR),
+                hsvValues);
 
-        // loop and read the RGB and distance data.
-        // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
-       // while (opModeIsActive() && !robot.C2Servo.equals(0.3)) {
-            // convert the RGB values to HSV values.
-            // multiply by the SCALE_FACTOR.
-            // then cast it back to int (SCALE_FACTOR is a double)
-            Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
-                    (int) (sensorColor.green() * SCALE_FACTOR),
-                    (int) (sensorColor.blue() * SCALE_FACTOR),
-                    hsvValues);
+//        robot.C2Servo.setPosition(0.5);
+//        sleep(500);
+//        robot.CServo.setPosition(0.5);
+//        sleep(2000);
+//
+//        telemetry.addData("Hue", hsvValues[0]);
+//        telemetry.addData("Distance (cm)",
+//                String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
+//        telemetry.update();
+//
+//        sleep(2000);
 
-            // send the info back to driver station using telemetry function.
-            telemetry.addData("Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
-            telemetry.addData("Alpha", sensorColor.alpha());
-            telemetry.addData("Red  ", sensorColor.red());
-            telemetry.addData("Green", sensorColor.green());
-            telemetry.addData("Blue ", sensorColor.blue());
-            telemetry.addData("Hue", hsvValues[0]);
+        robot.CServo.setPosition(0);
+        sleep(1000);
+        robot.CServo.setPosition(1);
+        sleep(1000);
+        robot.CServo.setPosition(0.5);
+        sleep(1000);
 
+//        if (hsvValues[0] < 50) {
+//            robot.C2Servo.setPosition(0.1);
+//            sleep(500);
+//        }
+//        else if (hsvValues[0] > 50) {
+//            robot.C2Servo.setPosition(0.9);
+//            sleep(500);
+//        }
+//        robot.CServo.setPosition(0);
+//        sleep(1000);
+//
+//        simple.encoderDrive(robot, 1, 5,5,2);
+//        telemetry.addLine("Done!");
+//        telemetry.update();
+//        sleep(1000);
 
-            robot.C2Servo.setPosition(0.5);
-            robot.CServo.setPosition(0.5);
-            sleep(200);
-
-            // knocks blue off
-            // hue value is small = red
-            // move 0.1 left toward phone because that's where blue is
-            if (hsvValues[0] < 50) {
-                robot.C2Servo.setPosition(0.1);
-                sleep(500);
-            }
-            else if (hsvValues[0] > 50) {
-                robot.C2Servo.setPosition(0.9);
-                sleep(500);
-            }
-            robot.CServo.setPosition(0);
-            sleep(500);
-
-            // put glyph in tower
-
-            simple.setMode(robot);
-            simple.encoderDrive(robot, 0.2, 22, 22, 8);
-            simple.centerDrive(0.75, -8, 3.5);
-            robot.track.setPower(-0.5);
-            simple.verticalDrive(0.05, -8, 2);
-            robot.track.setPower(0);
-            simple.encoderDrive(robot, 0.2, 6, 6, 3);
-            simple.encoderDrive(robot, -0.2, 6, 6, 2);
-
-
-        //robot.C2Servo.setPosition(0.5);
-
-            // change the background color to match the color detected by the RGB sensor.
-            // pass a reference to the hue, saturation, and value array as an argument
-            // to the HSVToColor method.
-            relativeLayout.post(new Runnable() {
-                public void run() {
-                    relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
-                }
-            });
-
-            telemetry.update();
-      // }
-
-        // Set the panel back to the default color
-        relativeLayout.post(new Runnable() {
-            public void run() {
-                relativeLayout.setBackgroundColor(Color.WHITE);
-            }
-        });
     }
 }
