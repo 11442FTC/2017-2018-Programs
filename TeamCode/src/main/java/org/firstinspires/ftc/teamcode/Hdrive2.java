@@ -20,7 +20,10 @@ public class Hdrive2 extends OpMode {
 
 
     double clawPosition = robot.clawHome;
-    final double clawSpeed = 0.2;
+    final double clawSpeed = 0.1;
+
+    double rotatePosition = robot.clawRotateHome;
+    final double rotateSpeed = 0.1;
 
 
 
@@ -70,12 +73,20 @@ public class Hdrive2 extends OpMode {
         }
         //^^center wheel on left/right
 
-        if(gamepad2.x){
+        if(gamepad2.dpad_up){
             clawPosition += clawSpeed;
 
         }
-        if (gamepad2.y){
+        if (gamepad2.dpad_down){
             clawPosition -= clawSpeed;
+        }
+
+        if(gamepad2.dpad_left){
+            rotatePosition += rotateSpeed;
+
+        }
+        if (gamepad2.dpad_right){
+            rotatePosition -= rotateSpeed;
         }
         //^^ claw on arm servo
 
@@ -91,24 +102,13 @@ public class Hdrive2 extends OpMode {
         }
         //^^ control the glyph track with the right and left bumpers
 
-        if (gamepad2.dpad_right){
-            robot.extend.setPower(0.5);
-        }
-        else if (gamepad2.dpad_left){
-            robot.extend.setPower(-0.5);
-        }
-        else{
-            robot.extend.setPower(0);
-        }
-        //^^ extend the arm with the motor with the right and left dpads
-
-
-
-
 
         clawPosition = Range.clip(clawPosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
         robot.claw.setPosition(clawPosition);
 
+
+        rotatePosition = Range.clip(rotatePosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
+        robot.clawRotate.setPosition(rotatePosition);
     }
 
 }

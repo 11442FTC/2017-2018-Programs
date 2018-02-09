@@ -154,8 +154,8 @@ public class autoLineSimple extends LinearOpMode {
 
 
     public void encoderDrive(HdriveHardware robot, double speed,
-                             double leftInches, double rightInches, double timeoutS
-    ) {
+                             double leftInches, double rightInches, double timeoutS)
+     {
         int newLeftTarget;
         int newRightTarget;
 

@@ -44,6 +44,7 @@ public class BackupAuto extends LinearOpMode {
     /* Declare OpMode members. */
     HdriveHardware robot = new HdriveHardware();   // Use a hardware
     private ElapsedTime runtime = new ElapsedTime();
+    vuDrive vu = new vuDrive();
 
     static final double COUNTS_PER_MOTOR_REV = 1680;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
@@ -57,6 +58,7 @@ public class BackupAuto extends LinearOpMode {
     static final double TURN_SPEED = 0.5;
     static final double FLAP_SPEED = 0.05;
     static final double CENTER_SPEED = 0.5;
+    autoLineSimple simple = new autoLineSimple();
 
     @Override
     public void runOpMode() {
@@ -66,6 +68,8 @@ public class BackupAuto extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
+        simple.init();
+        vu.init();
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
@@ -87,8 +91,8 @@ public class BackupAuto extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         //centerDrive(CENTER_SPEED, -12, 5);
 
+        simple.encoderDrive(robot, DRIVE_SPEED, 25, 25, 1.4);
 
-        encoderDrive(robot, DRIVE_SPEED, 25, 25, 9);
 
 
 
@@ -114,8 +118,7 @@ public class BackupAuto extends LinearOpMode {
 
 
     public void encoderDrive(HdriveHardware robot, double speed,
-                             double leftInches, double rightInches, double timeoutS
-    ) {
+                             double leftInches, double rightInches, double timeoutS) {
         int newLeftTarget;
         int newRightTarget;
 
@@ -143,29 +146,8 @@ public class BackupAuto extends LinearOpMode {
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
-                // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-                telemetry.addData("Path2", "Running at %7d :%7d",
-                        robot.leftMotor.getCurrentPosition(),
-                        robot.rightMotor.getCurrentPosition());
-                telemetry.update();
-            }
-
-            // Stop all motion;
-            robot.leftMotor.setPower(0);
-            robot.rightMotor.setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //  sleep(250);   // optional pause after each move
         }
     }
-
 
 }

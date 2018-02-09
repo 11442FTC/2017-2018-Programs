@@ -10,8 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 public class HdriveHardware{
-
-
+    public CRServo CRServo;
 
     public DcMotor  rightMotor;
     public DcMotor  leftMotor;
@@ -27,6 +26,8 @@ public class HdriveHardware{
 
     public DcMotor extend;
     public Servo claw;
+    public Servo clawRotate;
+
     public Servo extendServo;
 
     public Servo CServo;
@@ -42,9 +43,13 @@ public class HdriveHardware{
 
 
 
-    final double clawHome = 1.0;
+    final double clawHome = 1.5;
     final double CLAW_MIN_RANGE  = 0.0;
     final double CLAW_MAX_RANGE  = 1.0;
+
+    final double clawRotateHome = 1.0;
+    final double CLAWROTATE_MIN_RANGE  = 0.0;
+    final double CLAWROTATE_MAX_RANGE  = 1.0;
 
 
 
@@ -72,11 +77,13 @@ public class HdriveHardware{
         arm = hwMap.dcMotor.get("arm");
         claw = hwMap.servo.get("claw");
         extend = hwMap.dcMotor.get("extend");
+        clawRotate = hwMap.servo.get("rotateClaw");
 
 
         flap = hwMap.dcMotor.get("flap");
         track = hwMap.dcMotor.get("track");
 
+        CRServo = hwMap.crservo.get("crservo");
 
        // rightServo = hwMap.servo.get("rservo");
         //leftServo  = hwMap.servo.get("lservo");
