@@ -32,8 +32,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import java.util.Locale;
 
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
@@ -62,7 +68,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="lineAutoSimple")
+@Autonomous(name="red")
 
 public class autoLineSimple extends LinearOpMode {
 
@@ -83,8 +89,16 @@ public class autoLineSimple extends LinearOpMode {
     static final double FLAP_SPEED = 0.05;
     static final double CENTER_SPEED = 0.5;
 
+    ColorSensor sensorColor;
+    DistanceSensor sensorDistance;
+
     @Override
     public void runOpMode() {
+
+        sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
+
+        // get a reference to the distance sensor that shares the same name.
+        sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
 
         /*
          * Initialize the drive system variables.
@@ -122,13 +136,35 @@ public class autoLineSimple extends LinearOpMode {
         //centerDrive(CENTER_SPEED, -12, 5);
 
 
-        encoderDrive(robot, DRIVE_SPEED, 22, 22, 8);
-        centerDrive(CENTER_SPEED, -16, 5);
-        robot.track.setPower(-0.5);
-        verticalDrive(FLAP_SPEED, 6, 2);
-        robot.track.setPower(0);
-        encoderDrive(robot, DRIVE_SPEED, 8, 8, 4);
-        encoderDrive(robot, -0.2, 2, 2, 3);
+        robot.C2Servo.setPosition(0.4);
+        sleep(500);
+        robot.CServo.setPosition(.95);
+        sleep(2000);
+
+
+        telemetry.addData("Distance (cm)",
+                String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
+        telemetry.update();
+
+        sleep(2000);
+        telemetry.addData("Red  ", sensorColor.red());
+        telemetry.update();
+        if (sensorColor.red() < 60 && sensorColor.blue() > 30) {
+            robot.C2Servo.setPosition(0.9);
+            sleep(500);
+        }
+        else {
+            robot.C2Servo.setPosition(0.1);
+            sleep(500);
+        }
+        robot.CServo.setPosition(0);
+        sleep(500);
+        robot.C2Servo.setPosition(1);
+        sleep(1000);
+
+
+
+        encoderDrive(robot, DRIVE_SPEED, 30, 30, 10);
 
 
 
@@ -207,80 +243,6 @@ public class autoLineSimple extends LinearOpMode {
         }
     }
 
-    public void verticalDrive(double speed,
-                              double inches, double timeoutS) {
-        int newTarget;
-
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
-
-            // Determine new target position, and pass to motor controller
-            newTarget = robot.flap.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH_FLAP);
-
-            robot.flap.setTargetPosition(newTarget);
-
-            // Turn On RUN_TO_POSITION
-            robot.flap.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-            // reset the timeout time and start motion.
-            runtime.reset();
-            robot.flap.setPower(Math.abs(speed));
-
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.flap.isBusy())) {
-
-                // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d", newTarget);
-                telemetry.addData("Path2", "Running at %7d", robot.flap.getCurrentPosition());
-                telemetry.update();
-            }
-
-            // Stop all motion;
-            robot.flap.setPower(0);
-
-
-            // Turn off RUN_TO_POSITION
-            robot.flap.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //  sleep(250);   // optional pause after each move
-        }
-    }
-
-    public void centerDrive(double speed, double centerInches, double timeoutS) {
-        int newCenterTarget;
-
-        if (opModeIsActive()) {
-
-            newCenterTarget = robot.center.getCurrentPosition() + (int) (centerInches * COUNTS_PER_INCH);
-
-            robot.center.setTargetPosition(newCenterTarget);
-
-            robot.center.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            runtime.reset();
-            robot.center.setPower(Math.abs(speed));
-
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.center.isBusy())) {
-
-                // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d", newCenterTarget);
-                telemetry.addData("Path2", "Running at %7d", robot.center.getCurrentPosition());
-                telemetry.update();
-            }
-            robot.center.setPower(0);
-
-            robot.center.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
 }

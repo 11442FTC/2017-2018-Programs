@@ -42,13 +42,22 @@ public class HdriveHardware{
     final double LEFT_MAX_RANGE  = 1.0;
 
 
+    final double c2Home = 1.0;
+    final double C2_MIN_RANGE  = 0;
+    final double C2_MAX_RANGE  = 1.0;
 
-    final double clawHome = 1.5;
-    final double CLAW_MIN_RANGE  = 0.0;
+    final double cHome = 1.0;
+    final double C_MIN_RANGE  = 0;
+    final double C_MAX_RANGE  = 1.0;
+
+
+
+    final double clawHome = 1.0;
+    final double CLAW_MIN_RANGE  = 0.5;
     final double CLAW_MAX_RANGE  = 1.0;
 
     final double clawRotateHome = 1.0;
-    final double CLAWROTATE_MIN_RANGE  = 0.0;
+    final double CLAWROTATE_MIN_RANGE  = 0.5;
     final double CLAWROTATE_MAX_RANGE  = 1.0;
 
 
@@ -106,8 +115,7 @@ public class HdriveHardware{
         extend.setPower(0);
 
 
-
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         center.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

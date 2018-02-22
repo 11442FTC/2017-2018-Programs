@@ -23,9 +23,13 @@ public class Hdrive2 extends OpMode {
     final double clawSpeed = 0.1;
 
     double rotatePosition = robot.clawRotateHome;
-    final double rotateSpeed = 0.1;
+    final double rotateSpeed = 0.007;
 
+    double cPosition = robot.cHome;
+    final double cSpeed = 0.1;
 
+    double c2Position = robot.c2Home;
+    final double c2Speed = 0.1;
 
     @Override
     public void init() {
@@ -36,8 +40,8 @@ public class Hdrive2 extends OpMode {
     @Override
     public void loop() {
 
-        float left = gamepad1.right_stick_y;
-        float right = gamepad1.left_stick_y;
+        float left = -gamepad1.right_stick_y;
+        float right = -gamepad1.left_stick_y;
 
         right = Range.clip(right, -1, 1);
         left = Range.clip(left, -1, 1);
@@ -102,12 +106,34 @@ public class Hdrive2 extends OpMode {
         }
         //^^ control the glyph track with the right and left bumpers
 
+        if(gamepad1.dpad_up){
+            cPosition += cSpeed;
+
+        }
+        if (gamepad1.dpad_down){
+            cPosition -= cSpeed;
+        }
+
+
+        if(gamepad1.dpad_left){
+            c2Position += c2Speed;
+
+        }
+        if (gamepad1.dpad_right){
+            c2Position -= c2Speed;
+        }
+
+        cPosition = Range.clip(cPosition, robot.C_MIN_RANGE, robot.C_MAX_RANGE);
+        robot.CServo.setPosition(cPosition);
+
+        c2Position = Range.clip(c2Position, robot.C2_MIN_RANGE, robot.C2_MAX_RANGE);
+        robot.C2Servo.setPosition(c2Position);
 
         clawPosition = Range.clip(clawPosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
         robot.claw.setPosition(clawPosition);
 
 
-        rotatePosition = Range.clip(rotatePosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
+        rotatePosition = Range.clip(rotatePosition, robot.CLAWROTATE_MIN_RANGE, robot.CLAWROTATE_MAX_RANGE);
         robot.clawRotate.setPosition(rotatePosition);
     }
 

@@ -180,9 +180,27 @@ public class vuDrive extends LinearOpMode {
 
 
         telemetry.addData("VuMark", "%s visible", vuMark);
-        simple.encoderDrive(robot, 0.2, 25, 25, 5);
+        simple.encoderDrive(robot, -0.2, 25, 25, 5);
         telemetry.addLine("done");
         telemetry.update();
+        simple.encoderDrive(robot, -0.2, 0, 25, 5);
+        sleep(5000);
+        switch (vuMark){
+            case LEFT:
+                simple.encoderDrive(robot, 0.2, 25, 25, 5);
+                break;
+            case CENTER:
+                simple.encoderDrive(robot, 0.2, 25, 25, 5);
+                break;
+            case RIGHT:
+                simple.encoderDrive(robot, 0.2, 25, 25, 5);
+                break;
+            default:
+
+                break;
+        }
+
+
     }
 
 

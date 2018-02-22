@@ -52,7 +52,7 @@ import java.util.Locale;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
  */
-@Autonomous(name = "Red")
+@Autonomous(name = "NOTred")
 // Comment this out to add to the opmode list
 public class colorSensorServoTest extends LinearOpMode {
 
@@ -98,7 +98,7 @@ public class colorSensorServoTest extends LinearOpMode {
 
         robot.C2Servo.setPosition(0.5);
         sleep(500);
-        robot.CServo.setPosition(0.9);
+        robot.CServo.setPosition(1);
         sleep(2000);
 
         telemetry.addData("Hue", hsvValues[0]);
@@ -107,29 +107,28 @@ public class colorSensorServoTest extends LinearOpMode {
         telemetry.update();
 
         sleep(2000);
-
-        if (hsvValues[0] < 50) {
+        telemetry.addData("Red  ", sensorColor.red());
+        telemetry.update();
+        if (sensorColor.red() > 100) {
             robot.C2Servo.setPosition(0.1);
             sleep(500);
         }
-        else if (hsvValues[0] > 50) {
+        else {
             robot.C2Servo.setPosition(0.9);
             sleep(500);
         }
-        robot.CServo.setPosition(0);
+
+        robot.CServo.setPosition(1);
+        robot.C2Servo.setPosition(0);
         sleep(1000);
 
-//        simple.encoderDrive(robot, 1, 25, 25, 1.4);
-//        simple.centerDrive(0.75, -16, 1);
-//        robot.track.setPower(-0.5);
-//        simple.verticalDrive(0.05, 6, 2);
-//        robot.track.setPower(0);
-//        simple.encoderDrive(robot, 1, 8, 8, 0.2);
-//        simple.encoderDrive(robot, -0.2, 2, 2, 0.2);
+        simple.encoderDrive(robot, 0.1, 22, 22, 8);
+
 
         telemetry.addLine("Done!");
         telemetry.update();
         sleep(1000);
+
 
     }
 }
