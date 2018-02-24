@@ -20,16 +20,16 @@ public class Hdrive2 extends OpMode {
 
 
     double clawPosition = robot.clawHome;
-    final double clawSpeed = 0.1;
+    final double clawSpeed = 0.007;
 
     double rotatePosition = robot.clawRotateHome;
     final double rotateSpeed = 0.007;
 
-    double cPosition = robot.cHome;
-    final double cSpeed = 0.1;
-
-    double c2Position = robot.c2Home;
-    final double c2Speed = 0.1;
+//    double cPosition = robot.cHome;
+//    final double cSpeed = 0.007;
+//
+//    double c2Position = robot.c2Home;
+//    final double c2Speed = 0.007;
 
     @Override
     public void init() {
@@ -106,28 +106,28 @@ public class Hdrive2 extends OpMode {
         }
         //^^ control the glyph track with the right and left bumpers
 
-        if(gamepad1.dpad_up){
-            cPosition += cSpeed;
-
-        }
-        if (gamepad1.dpad_down){
-            cPosition -= cSpeed;
-        }
-
-
-        if(gamepad1.dpad_left){
-            c2Position += c2Speed;
-
-        }
-        if (gamepad1.dpad_right){
-            c2Position -= c2Speed;
-        }
-
-        cPosition = Range.clip(cPosition, robot.C_MIN_RANGE, robot.C_MAX_RANGE);
-        robot.CServo.setPosition(cPosition);
-
-        c2Position = Range.clip(c2Position, robot.C2_MIN_RANGE, robot.C2_MAX_RANGE);
-        robot.C2Servo.setPosition(c2Position);
+//        if(gamepad1.dpad_up){
+//            cPosition += cSpeed;
+//
+//        }
+//        if (gamepad1.dpad_down){
+//            cPosition -= cSpeed;
+//        }
+//
+//
+//        if(gamepad1.dpad_left){
+//            c2Position += c2Speed;
+//
+//        }
+//        if (gamepad1.dpad_right){
+//            c2Position -= c2Speed;
+//        }
+//
+//        cPosition = Range.clip(cPosition, robot.C_MIN_RANGE, robot.C_MAX_RANGE);
+//        robot.CServo.setPosition(cPosition);
+//
+//        c2Position = Range.clip(c2Position, robot.C2_MIN_RANGE, robot.C2_MAX_RANGE);
+//        robot.C2Servo.setPosition(c2Position);
 
         clawPosition = Range.clip(clawPosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
         robot.claw.setPosition(clawPosition);

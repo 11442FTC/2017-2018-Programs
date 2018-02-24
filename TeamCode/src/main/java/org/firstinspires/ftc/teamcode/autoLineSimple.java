@@ -136,9 +136,9 @@ public class autoLineSimple extends LinearOpMode {
         //centerDrive(CENTER_SPEED, -12, 5);
 
 
-        robot.C2Servo.setPosition(0.4);
+        robot.C2Servo.setPosition(0.5);
         sleep(500);
-        robot.CServo.setPosition(.95);
+        robot.CServo.setPosition(0.95);
         sleep(2000);
 
 
@@ -157,14 +157,19 @@ public class autoLineSimple extends LinearOpMode {
             robot.C2Servo.setPosition(0.1);
             sleep(500);
         }
-        robot.CServo.setPosition(0);
-        sleep(500);
-        robot.C2Servo.setPosition(1);
+        robot.C2Servo.setPosition(0.4);
         sleep(1000);
+        robot.CServo.setPosition(0.5);
+        sleep(500);
+        robot.C2Servo.setPosition(0);
+        sleep(500);
 
 
 
-        encoderDrive(robot, DRIVE_SPEED, 30, 30, 10);
+
+
+
+        encoderDrive(robot, -DRIVE_SPEED, -30, -30, 10);
 
 
 

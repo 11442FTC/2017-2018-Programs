@@ -101,9 +101,6 @@ public class HdriveHardware{
         C2Servo = hwMap.servo.get("C2Servo");
 
 
-
-
-
         rightMotor.setPower(0);
         leftMotor.setPower(0);
         center.setPower(0);

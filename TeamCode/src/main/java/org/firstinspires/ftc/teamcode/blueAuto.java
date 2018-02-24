@@ -135,36 +135,38 @@ public class blueAuto extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         //centerDrive(CENTER_SPEED, -12, 5);
 
-//
-//        robot.C2Servo.setPosition(0.4);
-//        sleep(500);
-//        robot.CServo.setPosition(.95);
-//        sleep(2000);
-//
-//
-//        telemetry.addData("Distance (cm)",
-//                String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
-//        telemetry.update();
-//
-//        sleep(2000);
-//        telemetry.addData("blue  ", sensorColor.blue());
-//        telemetry.update();
-//        if (sensorColor.red() > 60 && sensorColor.blue() < 50) {
-//            robot.C2Servo.setPosition(0.9);
-//            sleep(500);
-//        }
-//        else {
-//            robot.C2Servo.setPosition(0.1);
-//            sleep(500);
-//        }
-//        robot.CServo.setPosition(0);
-//        sleep(500);
-//        robot.C2Servo.setPosition(0);
-//        sleep(1000);
+
+        robot.C2Servo.setPosition(0.5);
+        sleep(500);
+        robot.CServo.setPosition(.95);
+        sleep(2000);
 
 
+        telemetry.addData("Distance (cm)",
+                String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
+        telemetry.update();
 
-        encoderDrive(robot, -0.1, -25, -25, 10);
+        sleep(2000);
+        telemetry.addData("blue  ", sensorColor.blue());
+        telemetry.update();
+        if (sensorColor.red() > sensorColor.blue()) {
+            robot.C2Servo.setPosition(0.9);
+            sleep(500);
+        }
+        else {
+            robot.C2Servo.setPosition(0.1);
+            sleep(500);
+        }
+
+        robot.C2Servo.setPosition(0.5);
+        sleep(1000);
+        robot.CServo.setPosition(0.5);
+        sleep(500);
+        robot.C2Servo.setPosition(0);
+        sleep(500);
+
+
+        encoderDrive(robot, 0.1, 25, 25, 10);
 
 
 
